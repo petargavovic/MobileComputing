@@ -1,0 +1,22 @@
+<ion-input *ngIf="editingMode" type="text" [(ngModel)]="editedText" [disabled]="!editingMode"></ion-input>
+<ion-card *ngIf="comment">
+  <ion-item>
+    <ion-avatar slot="start">
+      <img [src]="photoUrl" alt="User Image">
+    </ion-avatar>
+    
+    <ion-label>
+      <h2>{{ username }}</h2>
+      <ng-container *ngIf="!editingMode">
+        <p>{{ text }}</p>
+      </ng-container>
+      
+    </ion-label>
+    <ion-buttons slot="end" *ngIf="isLoggedUserComment()">
+      <ion-button *ngIf="!editingMode" (click)="toggleEditMode()">Edit</ion-button>
+      <ion-button *ngIf="editingMode" (click)="saveEdit()">Save</ion-button>
+      <ion-button (click)="deleteComment()">Delete</ion-button>
+    </ion-buttons>
+  </ion-item>
+        <p class="comment-date">{{ dateTimePosted | date: 'medium' }}</p>
+</ion-card>

@@ -1,0 +1,14 @@
+.profile-button-img {
+  width: auto;
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 50%;
+}
+.text-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.username{
+  margin: 0;
+  font-weight: bold;
+}
