@@ -50,11 +50,21 @@ const routes: Routes = [
     loadChildren: () => import('./home/home.module').then( m => m.HomePageModule),
     canLoad: [AuthGuard]
   },
+  {
+    path: 'chat/:userId',
+    loadChildren: () => import('./chat/chat/chat.module').then( m => m.ChatPageModule),
+    canLoad: [AuthGuard]
+  },
+  {
+    path: 'contacts',
+    loadChildren: () => import('./chat/contacts/contacts.module').then( m => m.ContactsPageModule)
+  },
   // Za rute koje ne postoje
   {
     path: '**',
     redirectTo: 'log-in'
   }
+  
 ];
 
 @NgModule({

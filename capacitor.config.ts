@@ -6,6 +6,12 @@ const config: CapacitorConfig = {
   webDir: 'www',
   server: {
     androidScheme: 'https'
+  },
+  plugins: {
+    Camera: {
+      // Camera configuration options
+      webUseInput: true // Enable this for web platform testing
+    }
   }
 };
 

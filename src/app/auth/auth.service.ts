@@ -9,6 +9,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { switchMap, take } from 'rxjs/operators';
 import { UserModelModel } from '../user/user.model';
+import firebase from 'firebase/compat/app';
 
 interface UserData {
   name: string;
@@ -53,7 +54,18 @@ export class AuthService {
         return of(null);
       }
     })
-  ); }
+  );
+  this.setPersistance();
+}
+
+private async setPersistance(){
+  await this.afAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+}
+
+getAuthState() {
+  return this.afAuth.authState;
+}
+
   get users() {
     return this._users.asObservable();
   }

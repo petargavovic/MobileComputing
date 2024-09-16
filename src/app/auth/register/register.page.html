@@ -56,15 +56,9 @@
         </ion-col>
 
         <ion-col size="10">
-          <ion-item>
-            <ion-label position="floating" >Profile photo URL</ion-label>
-            <ion-input type="text" formControlName="photoUrl" ></ion-input>
-          </ion-item>
-          <ion-item lines="none" *ngIf="registerForm.get('photoUrl')?.invalid && registerForm.get('photoUrl')?.touched">
-            <ion-label>Should be a valid URL address</ion-label>
-          </ion-item>
-
-
+          <input type="file" (change)="fileSelected($event)">
+          <ion-button color="primary" (click) = "takePhoto()">Take Photo</ion-button>
+          <img [src]="imageUrl">
         </ion-col>
         <ion-col size="9">
           <ion-button type="submit" expand="full" size="large" [disabled]="registerForm.invalid">Register</ion-button>

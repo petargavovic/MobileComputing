@@ -102,7 +102,8 @@ export class FeedDetailsPage implements OnInit {
             this.feed.id,
             resultData.data.feedData.title,
             resultData.data.feedData.description,
-            resultData.data.feedData.imageUrl
+            resultData.data.feedData.imageUrl,
+            resultData.data.feedData.userId
           ).subscribe(() => {
             this.feed.title = resultData.data.feedData.title;
             this.feed.description = resultData.data.feedData.description;

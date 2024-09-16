@@ -6,12 +6,9 @@
 
 <ion-content [fullscreen]="true">
   <ion-grid [fixed]="true" class="feed-grid">
-    <ion-row *ngFor="let feed of feedsWithUsers" class="feed-item">
-      <ion-col size="12" class="feed-content">
-        <img [src]="feed.imageUrl" alt="{{ feed.title }}" class="feed-image" (click)="showDetails(feed.id)"/>
-        <h2 class="feed-title">{{ feed.title }}</h2>
-        <p class="feed-description">{{ feed.description }}</p>
-        <img [src]="feed.profileUrl" alt="Profile Picture" class="profile-button-img" (click)="viewPosterProfile(feed.userId)"/>
+    <ion-row *ngFor="let feed of feeds">
+      <ion-col>
+        <app-feed-item [feed]="feed"></app-feed-item>
       </ion-col>
     </ion-row>
   </ion-grid>

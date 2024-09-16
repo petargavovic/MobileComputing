@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AlertController } from '@ionic/angular';
 import {ExploreService} from "../feed/explore.service";
+import { UploadService } from '../upload.service';
 
 
 @Component({
@@ -15,14 +16,15 @@ export class PublishPostPage implements OnInit {
   constructor(
     private fb: FormBuilder,
     private exploreService: ExploreService,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private uploadService: UploadService
   ) {}
 
   ngOnInit() {
     this.postForm = this.fb.group({
       title: ['', [Validators.required]],
       description: ['', [Validators.required]],
-      imageUrl: ['', [Validators.required, Validators.pattern('https?://.+')]],
+      imageUrl: ['', [Validators.required]],
     });
   }
 
@@ -50,6 +52,19 @@ export class PublishPostPage implements OnInit {
           await alert.present();
         }
       );
+    }
+  }
+
+  fileSelected(event: any){
+    const file = event.target.files[0];
+    if(file){
+      this.uploadService.uploadImage(file, this.uploadService.generateImagePath(file))
+          .then(downloadUrl => {
+            this.postForm.value.imageUrl = downloadUrl;
+          })
+          .catch(error => {
+            console.error('Error uploading image:', error);
+          });
     }
   }
 }

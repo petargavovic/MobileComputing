@@ -218,4 +218,8 @@ export class ProfilePage implements OnInit {
         modal.present();
       })
     }
+
+    startChat() {
+      this.router.navigate(['/chat', this.userId]);
+    }
   }

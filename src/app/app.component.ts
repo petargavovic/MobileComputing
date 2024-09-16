@@ -14,11 +14,20 @@ export class AppComponent implements OnInit {
   constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit() {
+    this.authService.getAuthState().subscribe(user => {
+      if (user) {
+        console.log(user);
+        this.router.navigate(['/home']);
+      } else {
+        this.router.navigate(['/log-in']);
+      }
+    });
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(() => {
       const currentRoute = this.router.url;
       this.showTabs = currentRoute !== '/log-in' && currentRoute !== '/register';
     });
   }
+
   goToUserProfile() {
     this.authService.user.subscribe(user => {
       if (user) {

@@ -11,6 +11,7 @@ interface FeedData {
   description: string;
   imageUrl: string;
   userId: string;
+  dateTimePosted: Date;
 }
 
 interface CommentData {
@@ -27,7 +28,7 @@ export class ExploreService {
   private _feeds = new BehaviorSubject<Feed[]>([]);
   private baseUrl = 'https://connecthub-mobile-computing-default-rtdb.europe-west1.firebasedatabase.app';
 
-  private _comments = new BehaviorSubject<CommentModel[]>([]);
+  public _comments = new BehaviorSubject<CommentModel[]>([]);
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -57,7 +58,8 @@ export class ExploreService {
           title,
           description,
           imageUrl,
-          fetchedUserId!
+          fetchedUserId!,
+          new Date()
         );
         return this.http.post<{ name: string }>(
           `${this.baseUrl}/feeds.json?auth=${token}`,
@@ -94,7 +96,8 @@ export class ExploreService {
               feedsData[key].title,
               feedsData[key].description,
               feedsData[key].imageUrl,
-              feedsData[key].userId
+              feedsData[key].userId,
+              feedsData[key].dateTimePosted
             ));
           }
         }
@@ -119,7 +122,8 @@ export class ExploreService {
               feedData.title,
               feedData.description,
               feedData.imageUrl,
-              feedData.userId
+              feedData.userId,
+              feedData.dateTimePosted
             );
           })
         );
@@ -146,7 +150,8 @@ export class ExploreService {
               feedsData[key].title,
               feedsData[key].description,
               feedsData[key].imageUrl,
-              feedsData[key].userId
+              feedsData[key].userId,
+              feedsData[key].dateTimePosted
             ));
           }
         }
@@ -155,14 +160,15 @@ export class ExploreService {
     );
   }
 
-  editFeed(id: string, title: string, description: string, imageUrl: string) {
+  editFeed(id: string, title: string, description: string, imageUrl: string, userId: string) {
     let updatedFeeds: Feed[];
+    let dateTimePosted = new Date();
     return this.authService.getToken().pipe(
       take(1),
       switchMap(token => {
         return this.http.put(
           `${this.baseUrl}/feeds/${id}.json?auth=${token}`,
-          { title, description, imageUrl }
+          { title, description, imageUrl, userId, dateTimePosted }
         );
       }),
       switchMap(() => this.feeds),
@@ -170,7 +176,7 @@ export class ExploreService {
       tap(feeds => {
         const updatedFeedIndex = feeds.findIndex(f => f.id === id);
         updatedFeeds = [...feeds];
-        updatedFeeds[updatedFeedIndex] = new Feed(id, title, description, imageUrl, feeds[updatedFeedIndex].userId);
+        updatedFeeds[updatedFeedIndex] = new Feed(id, title, description, imageUrl, feeds[updatedFeedIndex].userId, new Date());
         this._feeds.next(updatedFeeds);
       })
     );
@@ -218,7 +224,7 @@ export class ExploreService {
           new Date()
         );
         return this.http.post<{ name: string }>(
-          `${this.baseUrl}/comments.json?auth=${token}`,
+          `${this.baseUrl}/feeds/${feedId}/comments.json?auth=${token}`,
           { ...newComment, id: null }
         );
       }),
@@ -239,14 +245,12 @@ export class ExploreService {
       take(1),
       switchMap(token => {
         return this.http.get<{ [key: string]: CommentData }>(
-          `${this.baseUrl}/comments.json?auth=${token}`);
+          `${this.baseUrl}/feeds/${feedId}/comments.json?auth=${token}`);
       }),
       map(commentsData => {
 
         const comments: CommentModel[] = [];
         for (const key in commentsData) {
-          console.log(commentsData[key].dateTimePosted);
-          if(commentsData[key].feedId == feedId)
             if (commentsData.hasOwnProperty(key)) {
               comments.push(new CommentModel(
                 key,
@@ -269,7 +273,7 @@ export class ExploreService {
       take(1),
       switchMap(token => {
         return this.http.put(
-          `${this.baseUrl}/comments/${id}.json?auth=${token}`,
+          `${this.baseUrl}/feeds/${feedId}/comments/${id}.json?auth=${token}`,
           { uid, feedId, text, dateTimePosted}
         );
       }),
@@ -284,12 +288,12 @@ export class ExploreService {
     );
   }
 
-  deleteComment(id: string) {
+  deleteComment(id: string, feedId: string) {
     return this.authService.getToken().pipe(
       take(1),
       switchMap(token => {
         return this.http.delete(
-          `${this.baseUrl}/comments/${id}.json?auth=${token}`
+          `${this.baseUrl}/feeds/${feedId}/comments/${id}.json?auth=${token}`
         ).pipe(
           catchError(error => {
             console.error('Error deleting comment:', error);

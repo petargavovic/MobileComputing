@@ -20,12 +20,12 @@
     <ion-row>
       <ion-col>
         <h2>{{ feed.title }}</h2>
-        <p>{{ feed.description }}</p>
+        <p class="date">"{{ feed.dateTimePosted | date: 'medium' }}"</p>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
-        <img [src]="photoUrl" alt="Profile Picture" class="profile-button-img" (click)="viewPosterProfile(feed.userId)" />
+        <img [src]="photoUrl" alt="Profile Picture" class="img-cropped" (click)="viewPosterProfile(feed.userId)" />
       </ion-col>
       <ion-col size="10">
         <div class="text-container">

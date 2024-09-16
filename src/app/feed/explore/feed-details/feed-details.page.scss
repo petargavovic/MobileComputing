@@ -1,8 +1,11 @@
-.profile-button-img {
-  width: auto;
-  height: auto; /* Maintain aspect ratio */
+.img-cropped {
+  object-fit: cover;
+  object-position: center center;
+  width: 15vw;
+  height: 15vw;
   border-radius: 50%;
 }
+
 .text-container {
   display: flex;
   flex-direction: column;

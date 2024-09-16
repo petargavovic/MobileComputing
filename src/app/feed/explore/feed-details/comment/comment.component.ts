@@ -4,6 +4,7 @@ import {UserService} from "../../../../user/user.service";
 import {FeedDetailsPage} from "../feed-details.page";
 import {UserModelModel} from "../../../../user/user.model";
 import { ExploreService } from 'src/app/feed/explore.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-comment',
@@ -16,7 +17,7 @@ export class CommentComponent implements OnInit {
   @Input() text: string = '';
   @Input() authUserId: string | null = '';
   @Input() feedId : string = "";
-  userId: string | null = null;
+  userId: string = "";
   username:string = "";
   photoUrl: string = "";
   editedText: string = '';
@@ -25,7 +26,7 @@ export class CommentComponent implements OnInit {
 
   public userC!: UserModelModel;
 
-  constructor(private userService: UserService, private exploreService: ExploreService) {}
+  constructor(private userService: UserService, private exploreService: ExploreService, private router: Router, private fdp: FeedDetailsPage) {}
 
   ngOnInit() {
     this.userService.getUserById(this.comment.uid).subscribe(user => {
@@ -44,7 +45,8 @@ export class CommentComponent implements OnInit {
 }
 
 deleteComment() {
-  this.exploreService.deleteComment(this.comment.key).subscribe(() => {});
+  this.exploreService.deleteComment(this.comment.key, this.feedId).subscribe(() => {});
+  this.fdp.comments = this.fdp.comments.filter(f => f.key !== this.comment.key);
 }
 
 toggleEditMode() {
@@ -63,6 +65,10 @@ saveEdit() {
     this.dateTimePosted = new Date();
     this.editingMode = false; 
   });
+}
+
+viewPosterProfile(){
+  this.router.navigate(['/profile', this.comment.uid]);
 }
 
 }

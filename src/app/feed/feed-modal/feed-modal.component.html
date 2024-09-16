@@ -31,9 +31,14 @@
     <ion-row>
       <ion-col size="12">
         <ion-item>
-          <ion-label position="floating">Image URL</ion-label>
-          <ion-input type="text" name="imageUrl" ngModel required></ion-input>
+          <input type="file" name="imageUrl" (change)="fileSelected($event)">
         </ion-item>
+        <ion-item>
+        <ion-button color="primary" (click) = "takePhoto()">Take Photo</ion-button>
+      </ion-item>
+      <ion-item>
+        <img [src]="imageUrl">
+      </ion-item>
       </ion-col>
     </ion-row>
     <ion-row>

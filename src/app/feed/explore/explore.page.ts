@@ -4,6 +4,7 @@ import { ExploreService } from '../explore.service';
 import {ModalController} from "@ionic/angular";
 import {FeedModalComponent} from "../feed-modal/feed-modal.component";
 import {Router} from "@angular/router";
+import { UserSearchModalComponent } from './user-search-modal/user-search-modal.component';
 
 @Component({
   selector: 'app-explore',
@@ -42,4 +43,13 @@ export class ExplorePage implements OnInit {
   openFeedDetails(feedId: string) {
     this.router.navigate(['/feed-details', feedId]);
   }
+
+  async openSearchModal() {
+    const modal = await this.modalCtrl.create({
+      component: UserSearchModalComponent,
+      componentProps: {route: '/profile'}
+    });
+    return await modal.present();
+  }
+
 }

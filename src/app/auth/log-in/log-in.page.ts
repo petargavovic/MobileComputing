@@ -12,6 +12,9 @@ export class LogInPage implements OnInit {
   isLoading=false;
   errorMessage: string = '';
 
+  email: string = 'nole@gmail.com';
+  passwordd: string = 'nole123';
+
   constructor(private authService:AuthService,private router:Router) { }
 
   ngOnInit() {

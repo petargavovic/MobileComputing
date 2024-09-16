@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, importProvidersFrom } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -16,6 +16,8 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { environment } from '../environments/environment';
 import {CommentComponent} from "./feed/explore/feed-details/comment/comment.component";
 import {FeedDetailsPage} from "./feed/explore/feed-details/feed-details.page";
+import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import {provideStorage, getStorage} from '@angular/fire/storage'
 
 @NgModule({
   declarations: [AppComponent, FeedEditModalComponent, CommentComponent, FeedDetailsPage],
@@ -30,7 +32,10 @@ import {FeedDetailsPage} from "./feed/explore/feed-details/feed-details.page";
     AngularFireAuthModule,
     AngularFirestoreModule
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, ([
+    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+    provideStorage(() => getStorage())
+  ])],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

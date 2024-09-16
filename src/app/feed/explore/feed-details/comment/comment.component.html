@@ -2,13 +2,13 @@
 <ion-card *ngIf="comment">
   <ion-item>
     <ion-avatar slot="start">
-      <img [src]="photoUrl" alt="User Image">
+      <img [src]="photoUrl" alt="User Image" (click)="viewPosterProfile()">
     </ion-avatar>
     
     <ion-label>
       <h2>{{ username }}</h2>
       <ng-container *ngIf="!editingMode">
-        <p>{{ text }}</p>
+        <h3>{{ text }}</h3>
       </ng-container>
       
     </ion-label>

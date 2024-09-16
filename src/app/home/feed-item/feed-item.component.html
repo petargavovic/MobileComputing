@@ -1,0 +1,14 @@
+<ion-card>
+  <ion-img [src]="feed.imageUrl" alt="{{ feed.title }}" class="feed-image" (click)="showDetails(feed.id)"></ion-img>
+  <ion-card-header>
+    <ion-card-title class="feed-title">{{ feed.title }}</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <p class="feed-description">{{ feed.description }}</p>
+  </ion-card-content>
+  <ion-item lines="none">
+    <ion-avatar slot="start">
+      <img [src]="user.photoUrl" alt="Profile Picture" class="profile-button-img" (click)="viewPosterProfile(feed.userId)">
+    </ion-avatar>
+  </ion-item>
+</ion-card>

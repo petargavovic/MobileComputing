@@ -9,6 +9,7 @@ import { ExplorePageRoutingModule } from './explore-routing.module';
 import { ExplorePage } from './explore.page';
 import {FeedElementComponent} from "../feed-element/feed-element.component";
 import {FeedModalComponent} from "../feed-modal/feed-modal.component";
+import { UserSearchModalComponent } from './user-search-modal/user-search-modal.component';
 
 // @ts-ignore
 // @ts-ignore
@@ -19,7 +20,7 @@ import {FeedModalComponent} from "../feed-modal/feed-modal.component";
     IonicModule,
     ExplorePageRoutingModule,
   ],
-  declarations: [ExplorePage,FeedElementComponent,FeedModalComponent],
+  declarations: [ExplorePage,FeedElementComponent,FeedModalComponent, UserSearchModalComponent],
   //entryComponents: [FeedModalComponent]
 })
 export class ExplorePageModule {}

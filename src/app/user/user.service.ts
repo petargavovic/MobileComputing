@@ -58,6 +58,62 @@ export class UserService {
     );
   }
 
+  getUserByUsername(username: string): Observable<UserModelModel | null> {
+    return this.authService.getToken().pipe(
+      take(1),
+      switchMap(token => {
+        return this.http.get<{ [key: string]: UserModelModel }>(
+          `${this.baseUrl}/users.json?auth=${token}`);
+      }),
+      map(usersData => {
+
+        for (const key in usersData) {
+          if(usersData[key].username == username)
+            if (usersData.hasOwnProperty(key)) {
+              return new UserModelModel(
+                usersData[key].uid,
+                usersData[key].email,
+                usersData[key].name,
+                usersData[key].surname,
+                usersData[key].username,
+                usersData[key].photoUrl
+              );
+            }
+        }
+        return null;
+      })
+    );
+  }
+
+  getUsers() {
+    return this.authService.getToken().pipe(
+      take(1),
+      switchMap(token => {
+        return this.http.get<{ [key: string]: UserModelModel }>(
+          `${this.baseUrl}/users.json?auth=${token}`
+        );
+      }),
+      map(usersData => {
+        const users: UserModelModel[] = [];
+        for (const key in usersData) {
+          if (usersData.hasOwnProperty(key)) {
+            users.push(new UserModelModel(
+              usersData[key].uid,
+                usersData[key].email,
+                usersData[key].name,
+                usersData[key].surname,
+                usersData[key].username,
+                usersData[key].photoUrl
+            ));
+          }
+        }
+        return users;
+      }),
+      tap(users => {
+        this._users.next(users);
+      })
+    );
+  }
 
   addUserDetail(uid: string, email: string, name: string, surname: string, username: string, photoUrl: string): Observable<any> {
     let newUser: UserModelModel;

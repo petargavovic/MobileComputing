@@ -12,7 +12,8 @@ export class FeedElementComponent  implements OnInit {
     title: 'title',
     description: 'asdasd',
     imageUrl: '',
-    userId: 'defaultUserId'
+    userId: 'defaultUserId',
+    dateTimePosted: new Date()
   };
   constructor() { }
 

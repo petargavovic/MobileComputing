@@ -34,46 +34,25 @@ export class HomePage implements OnInit {
     this.followService.getfollowing(this.authUserId as string).subscribe(follows => {
       this.following = follows;
     });
-    this.loadFeeds();
   }
-  showDetails(id:string){
-    this.router.navigate(['/feed-details', id]);
-  }
+
   ionViewDidEnter() {
     // Ensure feeds are loaded when entering the view
+    this.feeds = [];
     this.loadFeeds();
   }
 
   loadFeeds() {
     this.isLoading = true;
-    this.exploreService.feeds.subscribe(feeds => {
-      this.feeds = feeds;
-      this.feedsWithUsers = [];
-      const requests = feeds.map(feed => this.userService.getUserById(feed.userId));
-
-      forkJoin(requests).subscribe(users => {
-        users.forEach((user, index) => {
-          this.following.forEach((follow) =>{
-            if(follow?.followedId === this.authUserId) {
-              const feedWUModel: FeedWUModel = {
-                id: feeds[index].id,
-                userId: feeds[index].userId,
-                description: feeds[index].description,
-                title: feeds[index].title,
-                imageUrl: feeds[index].imageUrl,
-                profileUrl: user?.photoUrl as string,
-                username: user?.username as string
-              };
-              this.feedsWithUsers.push(feedWUModel);
-            }
-          });
+      this.followService.getfollowing(this.authUserId as string).subscribe((follows) =>{
+        follows.forEach(follow => {
+          this.exploreService.getUserPosts(follow.followedId).subscribe((posts)=>{
+            console.log(posts);
+            this.feeds = this.feeds.concat(posts);
+            this.feeds.reverse();
+            this.isLoading = false;
+          })
         });
-        this.isLoading = false;
       });
-    });
-  }
-
-  viewPosterProfile(posterId: string) {
-    this.router.navigate(['/profile', posterId]);
   }
 }
